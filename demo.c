@@ -95,6 +95,7 @@ int main( int argc, char** argv )
 			}
 			
 			nes_ntsc_init( ntsc, &setup );
+			fprintf(stdout, " sharpness: %.2f, gamma: %.2f \r", mouse_x, mouse_y);
 		}
 	}
 	
