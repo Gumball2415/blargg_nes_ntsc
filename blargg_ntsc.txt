@@ -1,0 +1,30 @@
+blargg_ntsc
+
+demo.c from nes_ntsc-0.2.2.zip, modified
+compiled for Windows by Persune
+2021-03-03
+
+original source code available here: http://blargg.8bitalley.com/libs/ntsc.html#nes_ntsc
+see readme.txt, license.txt or changes.txt for more information about the library
+compiled with SDL 2.0.14
+
+
+Command line usage: blarg_ntsc [input] [output]
+
+If [input] is omitted, it will default to test.bmp
+If [output] is omitted, it will default to filtered.bmp
+
+As an alternative to the command line, you can drag the input BMP onto the EXE file.
+
+Moving the mouse left or right adjusts sharpness.
+Moving the mouse up or down adjusts gamma.
+
+Press space to toggle merge fields.
+Press A to toggle scanlines.
+Press C to set composite.
+Press S to set S-Video.
+Press R to set RGB.
+Press M to set monochrome.
+Press D to toggle Sony decoder.
+
+Press Escape, Q, or click the mouse to quit and save to the output.

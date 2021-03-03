@@ -29,6 +29,7 @@ static long output_pitch;
 static float mouse_x, mouse_y; /* -1.0 to 1.0 */
 static int mouse_moved;
 static int key_pressed;
+static int scanlines = 1;
 
 /* implementation */
 
@@ -139,7 +140,10 @@ void double_output_height( void )
 			unsigned mixed = prev + next + ((prev ^ next) & 0x0821);
 			/* darken by 12% */
 			*(unsigned short*) out = prev;
-			*(unsigned short*) (out + output_pitch) = (mixed >> 1) - (mixed >> 4 & 0x18E3);
+			if (scanlines)
+				*(unsigned short*) (out + output_pitch) = (mixed >> 1) - (mixed >> 4 & 0x18E3);
+			else
+				*(unsigned short*)(out + output_pitch) = prev;
 			in += 2;
 			out += 2;
 		}

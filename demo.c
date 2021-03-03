@@ -69,6 +69,7 @@ int main( int argc, char** argv )
 		switch ( key_pressed )
 		{
 			case ' ': merge_fields = !merge_fields; break;
+			case 'a': scanlines = !scanlines; break;
 			case 'c': setup = nes_ntsc_composite; break;
 			case 's': setup = nes_ntsc_svideo; break;
 			case 'r': setup = nes_ntsc_rgb; break;
