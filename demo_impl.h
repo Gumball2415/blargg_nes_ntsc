@@ -32,9 +32,10 @@ static int key_pressed;
 
 /* implementation */
 
-static SDL_Rect rect;
-static SDL_Surface* screen;
+static SDL_Window* screen;
 static SDL_Surface* surface;
+static SDL_Texture* texture;
+static SDL_Renderer* renderer;
 static unsigned long next_time;
 
 void fatal_error( const char* str )
@@ -56,17 +57,23 @@ static void init_sdl_( void )
 
 void init_window( int width, int height )
 {
-	rect.w = width;
-	rect.h = height;
-	
 	init_sdl_();
-	
-	screen = SDL_SetVideoMode( width, height, 0, 0 );
-	surface = SDL_CreateRGBSurface( SDL_SWSURFACE, width, height, 16, 0, 0, 0, 0 );
-	if ( !screen || !surface )
+
+	screen = SDL_CreateWindow("NTSC Filter Demo",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		width, height,
+		0);
+	renderer = SDL_CreateRenderer(screen, -1, 0);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255); // debug
+	surface = SDL_CreateRGBSurface(0, width, height, 16, 0, 0, 0, 0);
+	texture = SDL_CreateTexture(renderer,
+		SDL_PIXELFORMAT_RGB565,
+		SDL_TEXTUREACCESS_STREAMING,
+		width, height);
+	;
+	if ( screen == NULL || renderer == NULL || surface == NULL || texture == NULL )
 		fatal_error( "SDL initialization failed" );
-	
-	SDL_WM_SetCaption( "NTSC Filter Demo", "NTSC Filter Demo" );
 }
 
 int read_input( void )
@@ -100,8 +107,8 @@ int read_input( void )
 			int x, y;
 			SDL_GetMouseState( &x, &y );
 			mouse_moved = 1;
-			mouse_x = x / (float) (SDL_GetVideoSurface()->w - 1) * 2 - 1;
-			mouse_y = (1 - y / (float) (SDL_GetVideoSurface()->h - 1)) * 2 - 1;
+			mouse_x = x / (float) (SDL_GetWindowSurface(screen)->w - 1) * 2 - 1;
+			mouse_y = (1 - y / (float) (SDL_GetWindowSurface(screen)->h - 1)) * 2 - 1;
 		}
 	}
 	return 1;
@@ -142,12 +149,16 @@ void double_output_height( void )
 void display_output( void )
 {
 	SDL_UnlockSurface( surface );
-	if ( SDL_BlitSurface( surface, &rect, screen, &rect ) < 0 || SDL_Flip( screen ) < 0 )
-		fatal_error( "SDL blit failed" );
+	if (SDL_UpdateTexture(texture, NULL, surface->pixels, surface->pitch) < 0
+		|| SDL_RenderClear(renderer) < 0
+		|| SDL_RenderCopy(renderer, texture, NULL, NULL) < 0)
+		fatal_error("SDL renderer failed");
+	SDL_RenderPresent(renderer);
+
 }
 
 void load_bmp( image_t* out, const char* path, SDL_Color palette [256] )
-{
+{	
 	SDL_PixelFormat fmt = { 0 }; /* clear fields */
 	SDL_Palette pal = { 0 };
 	SDL_Surface* bmp;
