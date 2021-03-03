@@ -184,6 +184,13 @@
     <ClInclude Include="nes_ntsc_config.h" />
     <ClInclude Include="nes_ntsc_impl.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="blargg_ntsc.txt" />
+    <Text Include="changes.txt" />
+    <Text Include="license.txt" />
+    <Text Include="nes_ntsc.txt" />
+    <Text Include="readme.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

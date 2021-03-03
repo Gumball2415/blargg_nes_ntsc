@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="benchmark.c" />
     <ClCompile Include="demo.c" />
     <ClCompile Include="nes_ntsc.c" />
   </ItemGroup>
@@ -10,5 +9,15 @@
     <ClInclude Include="nes_ntsc.h" />
     <ClInclude Include="nes_ntsc_config.h" />
     <ClInclude Include="nes_ntsc_impl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="benchmark.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="blargg_ntsc.txt" />
+    <Text Include="changes.txt" />
+    <Text Include="license.txt" />
+    <Text Include="nes_ntsc.txt" />
+    <Text Include="readme.txt" />
   </ItemGroup>
 </Project>

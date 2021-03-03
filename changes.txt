@@ -3,6 +3,11 @@ nes_ntsc Change Log
 
 nes_ntsc 0.2.3
 --------------
+- Updated SDL dependency to 2.0; updated SDL code in demo_impl.h accordingly
+- Added toggleable scanline rendering
+
+nes_ntsc 0.2.2
+--------------
 - Added ability to use a custom RGB palette in place of the NES color
 circuitry (with the option of being before color emphasis). When using
 this palette with otherwise default settings, RGB colors appear on

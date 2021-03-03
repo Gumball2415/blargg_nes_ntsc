@@ -1,4 +1,4 @@
-nes_ntsc 0.2.2: NES NTSC Video Filter
+nes_ntsc 0.2.3: NES NTSC Video Filter
 -------------------------------------
 This library filters a NES image to match what a TV would show, allowing
 an authentic image in an emulator. It uses a highly optimized algorithm

@@ -1,6 +1,6 @@
 blargg_ntsc
 
-demo.c from nes_ntsc-0.2.2.zip, modified
+demo.c from nes_ntsc-0.2.2.zip, modified to use SDL 2.0.14
 compiled for Windows by Persune
 2021-03-03
 
