@@ -20,4 +20,7 @@
     <Text Include="nes_ntsc.txt" />
     <Text Include="readme.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="test.bmp" />
+  </ItemGroup>
 </Project>

@@ -36,84 +36,170 @@ static SDL_Color palette [256] = {
 	{181,236,243},{184,184,184},{  0,  0,  0},{  0,  0,  0}
 };
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
+	if (argc > 1 && strcmp(argv[1], "-h") == 0)
+		cmd_usage();
+	else
+	{
 	image_t image;
 	int sony_decoder = 0;
 	int merge_fields = 1;
 	int burst_phase = 0;
 	nes_ntsc_setup_t setup = nes_ntsc_composite;
 
-	nes_ntsc_t* ntsc = (nes_ntsc_t*) malloc( sizeof (nes_ntsc_t) );
-	if ( !ntsc )
-		fatal_error( "Out of memory" );
-	nes_ntsc_init( ntsc, &setup );
-	
-	load_bmp( &image, (argc > 1 ? argv [1] : "test.bmp"), palette );
-	init_window( NES_NTSC_OUT_WIDTH( image.width ), image.height * 2 );
-	
-	while ( read_input() )
-	{
-		lock_pixels();
-		
-		burst_phase ^= 1;
-		if ( setup.merge_fields )
-			burst_phase = 0;
-		
-		nes_ntsc_blit( ntsc, image.byte_pixels, image.row_width, burst_phase,
-				image.width, image.height, output_pixels, output_pitch );
-		
-		double_output_height();
-		display_output();
-		
-		switch ( key_pressed )
+	nes_ntsc_t* ntsc = (nes_ntsc_t*)malloc(sizeof(nes_ntsc_t));
+	if (!ntsc)
+		fatal_error("Out of memory");
+	nes_ntsc_init(ntsc, &setup);
+
+		load_bmp(&image, (argc > 1 ? argv[1] : "test.bmp"), palette);
+		init_window(NES_NTSC_OUT_WIDTH(image.width), image.height * 2);
+
+		if (argc > 2 && strcmp(argv[3], "-c") == 0)
 		{
-			case ' ': merge_fields = !merge_fields; break;
-			case 'a': scanlines = !scanlines; break;
-			case 'c': setup = nes_ntsc_composite; break;
-			case 's': setup = nes_ntsc_svideo; break;
-			case 'r': setup = nes_ntsc_rgb; break;
-			case 'm': setup = nes_ntsc_monochrome; break;
-			case 'd': sony_decoder = !sony_decoder; break;
-		}
-		
-		if ( key_pressed || mouse_moved )
-		{
+
+			// handle commandline flags
+			burst_phase = 1;
+			float sharpness = 0.0;
+			float gamma = 0.0;
+			char videomode[] = "NTSC composite";
+			int i;
+			for (i = 0; i < argc; i++)
+			{
+				if (strcmp(argv[i], "-scanoff") == 0)
+					scanlines = 0;
+
+				if (strcmp(argv[i], "-mergeoff") == 0) {
+					merge_fields = 0;
+					burst_phase = atoll(argv[i + 1]);
+				}
+
+				if (strcmp(argv[i], "-sharpness") == 0)
+					sharpness = strtof(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-gamma") == 0)
+					gamma = strtof(argv[i + 1], NULL);
+
+				// how do I switch case with strings
+				if (strcmp(argv[i], "-vidmode") == 0) {
+					if (strcmp(argv[i + 1], "svid") == 0) {
+						setup = nes_ntsc_svideo;
+						strcpy(videomode, "S-Video");
+					}
+					else if (strcmp(argv[i + 1], "rgb") == 0) {
+						setup = nes_ntsc_rgb;
+						strcpy(videomode, "RGB");
+					}
+					else if (strcmp(argv[i + 1], "mono") == 0) {
+						setup = nes_ntsc_monochrome;
+						strcpy(videomode, "Monochrome");
+					}
+					else{
+						strcpy(videomode, "NTSC composite");
+					}
+				}
+
+				if (strcmp(argv[i], "-sony") == 0)
+					sony_decoder = 1;
+			}
 			setup.merge_fields = merge_fields;
-			
-			/* available parameters: hue, saturation, contrast, brightness,
-			sharpness, gamma, bleed, resolution, artifacts, fringing */
-			setup.sharpness = mouse_x;
-			setup.gamma     = mouse_y;
-			
+			setup.sharpness = sharpness;
+			setup.gamma = gamma;
+
 			setup.decoder_matrix = 0;
-			if ( sony_decoder )
+			if (sony_decoder)
 			{
 				/* Sony CXA2025AS US */
-				static float matrix [6] = { 1.630, 0.317, -0.378, -0.466, -1.089, 1.677 };
+				static float matrix[6] = { 1.630, 0.317, -0.378, -0.466, -1.089, 1.677 };
 				setup.decoder_matrix = matrix;
 			}
+			// I have no idea why I need to call nes_ntsc_init() twice
+			nes_ntsc_init(ntsc, &setup);
 			
-			nes_ntsc_init( ntsc, &setup );
-			fprintf(stdout, " sharpness: %.2f, gamma: %.2f \r", mouse_x, mouse_y);
+			lock_pixels();
+
+			if (setup.merge_fields)
+				burst_phase = 0;
+
+			nes_ntsc_blit(ntsc, image.byte_pixels, image.row_width, burst_phase,
+				image.width, image.height, output_pixels, output_pitch);
+
+			double_output_height();
+			display_output();
+
+			nes_ntsc_init(ntsc, &setup);
+
+			printf("\tscanline enabled:\t%i\n", scanlines);
+			printf("\tmerge fields enabled:\t%i\n", merge_fields);
+			printf("\tsharpness:\t\t%f\n", sharpness);
+			printf("\tgamma:\t\t\t%f\n", gamma);
+			printf("\tvideo mode:\t\t%s\n", videomode);
+			printf("\tsony decoder enabled:\t%i\n", sony_decoder);
 		}
-	}
-	
-	save_bmp( argc > 2 ? argv [2] : "filtered.bmp" );
-	
-	free( ntsc );
-	
-	/* write standard 192-byte NES palette */
-	{
-		FILE* out = fopen( "nes.pal", "wb" );
-		if ( out )
+		else
 		{
-			unsigned char palette [nes_ntsc_palette_size * 3];
-			setup.palette_out = palette;
-			nes_ntsc_init( 0, &setup );
-			fwrite( palette, 192, 1, out );
+			while (read_input())
+			{
+				lock_pixels();
+
+				burst_phase ^= 1;
+				if (setup.merge_fields)
+					burst_phase = 0;
+
+				nes_ntsc_blit(ntsc, image.byte_pixels, image.row_width, burst_phase,
+					image.width, image.height, output_pixels, output_pitch);
+
+				double_output_height();
+				display_output();
+
+				switch (key_pressed)
+				{
+				case ' ': merge_fields = !merge_fields; break;
+				case 'a': scanlines = !scanlines; break;
+				case 'c': setup = nes_ntsc_composite; break;
+				case 's': setup = nes_ntsc_svideo; break;
+				case 'r': setup = nes_ntsc_rgb; break;
+				case 'm': setup = nes_ntsc_monochrome; break;
+				case 'd': sony_decoder = !sony_decoder; break;
+				}
+
+				if (key_pressed || mouse_moved)
+				{
+					setup.merge_fields = merge_fields;
+
+					/* available parameters: hue, saturation, contrast, brightness,
+					sharpness, gamma, bleed, resolution, artifacts, fringing */
+					setup.sharpness = mouse_x;
+					setup.gamma = mouse_y;
+
+					setup.decoder_matrix = 0;
+					if (sony_decoder)
+					{
+						/* Sony CXA2025AS US */
+						static float matrix[6] = { 1.630, 0.317, -0.378, -0.466, -1.089, 1.677 };
+						setup.decoder_matrix = matrix;
+					}
+
+					nes_ntsc_init(ntsc, &setup);
+					fprintf(stdout, " sharpness: %.2f, gamma: %.2f \r", mouse_x, mouse_y);
+				}
+			}
+		}
+		save_bmp(argc > 2 ? argv[2] : "filtered.bmp");
+		free(ntsc);
+
+		/* write standard 192-byte NES palette */
+		{
+			FILE* out = fopen("nes.pal", "wb");
+			if (out)
+			{
+				unsigned char palette[nes_ntsc_palette_size * 3];
+				setup.palette_out = palette;
+				nes_ntsc_init(0, &setup);
+				fwrite(palette, 192, 1, out);
+			}
 		}
 	}
-	
 	return 0;
 }

@@ -1,4 +1,4 @@
-nes_ntsc 0.2.3: NES NTSC Video Filter
+nes_ntsc 0.2.4: NES NTSC Video Filter
 -------------------------------------
 Author  : Shay Green <gblargg@gmail.com>
 Website : http://www.slack.net/~ant/

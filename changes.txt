@@ -1,6 +1,10 @@
 nes_ntsc Change Log
 -------------------
 
+nes_ntsc 0.2.4
+-------------
+- Added commandline arguments and flags, see blarg_ntsc.txt for more info
+
 nes_ntsc 0.2.3
 --------------
 - Updated SDL dependency to 2.0; updated SDL code in demo_impl.h accordingly
