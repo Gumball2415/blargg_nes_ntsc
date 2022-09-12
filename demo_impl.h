@@ -201,16 +201,18 @@ void load_bmp( image_t* out, const char* path, SDL_Color palette [256] )
 	conv = SDL_ConvertSurface( bmp, &fmt, SDL_SWSURFACE );
 	if ( !conv )
 		fatal_error( "Couldn't convert BMP" );
-	SDL_FreeSurface( bmp );
-	
-	if ( SDL_LockSurface( conv ) < 0 )
-		fatal_error( "Couldn't lock surface" );
-	
-	out->byte_pixels = (unsigned char *) conv->pixels;
-	out->rgb_16      = (unsigned short*) conv->pixels;
-	out->width       = conv->w;
-	out->height      = conv->h;
-	out->row_width   = conv->pitch / fmt.BytesPerPixel;
+	else {
+		SDL_FreeSurface(bmp);
+
+		if (SDL_LockSurface(conv) < 0)
+			fatal_error("Couldn't lock surface");
+
+		out->byte_pixels = (unsigned char*)conv->pixels;
+		out->rgb_16 = (unsigned short*)conv->pixels;
+		out->width = conv->w;
+		out->height = conv->h;
+		out->row_width = conv->pitch / fmt.BytesPerPixel;
+	}
 }
 
 void save_bmp( const char* path )
