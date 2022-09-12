@@ -103,12 +103,12 @@ int main(int argc, char** argv)
 					sony_decoder = 1;
 				else if (strcmp(argv[i], "-decodematrix") == 0) {
 					sony_decoder = 0;
-					matrix[0] = atoll(argv[i + 1]);
-					matrix[1] = atoll(argv[i + 2]);
-					matrix[2] = atoll(argv[i + 3]);
-					matrix[3] = atoll(argv[i + 4]);
-					matrix[4] = atoll(argv[i + 5]);
-					matrix[5] = atoll(argv[i + 6]);
+					matrix[0] = strtof(argv[i + 1], NULL);
+					matrix[1] = strtof(argv[i + 2], NULL);
+					matrix[2] = strtof(argv[i + 3], NULL);
+					matrix[3] = strtof(argv[i + 4], NULL);
+					matrix[4] = strtof(argv[i + 5], NULL);
+					matrix[5] = strtof(argv[i + 6], NULL);
 				}
 			}
 			setup.merge_fields = merge_fields;
