@@ -2,26 +2,39 @@ blargg_ntsc
 
 demo.c from nes_ntsc-0.2.2.zip, modified to use SDL 2.0.14
 compiled for Windows by Persune
-2021-03-04
+2022-09-12
 
 original source code available here: http://blargg.8bitalley.com/libs/ntsc.html#nes_ntsc
 see readme.txt, license.txt or changes.txt for more information about the library
 compiled with SDL 2.0.14
 
 Command line usage:
-nes_ntsc	[input.bmp] [output.bmp]
-nes_ntsc	input.bmp output.bmp -c [-scanoff] [-mergeoff <burst phase>] [-sharpness <value>]
-		[-gamma <value>] [-vidmode cvbs|svid|rgb|mono] [-sony]
+nes_ntsc    [input.bmp] [output.bmp]
+nes_ntsc    input.bmp output.bmp -c [-scanoff] [-mergeoff <burstphase>] [-hue <value>]
+    [-saturation <value>] [-contrast <value>] [-brightness <value>] [-sharpness <value>]
+    [-gamma <value>] [-resolution <value>] [-artifacts <value>] [-fringing <value>]
+    [-bleed <value>] [-vidmode cvbs|svid|rgb|mono] [-sony]
+    [-decodematrix <ir> <qr> <ig> <qg> <ib> <qb>]
 
-	[input.bmp]	Input .bmp file. "test.bmp" by default.
-	[output.bmp]	Output .bmp file. "filtered.bmp" by default.
-	-c		Uses the following commandline parameters instead of opening a window:
-	[-scanoff]	Turns off scanline effects. On by default.
-	[-mergeoff]	Disables merging fields. Burst phase is 1 by default.
-	[sharpness]	<value> ranges from -1.00 to 1.00. 0 by default.
-	[gamma]		<value> ranges from -1.00 to 1.00. 0 by default.
-	[-vidmode]	Selects a video mode. "cvbs" by default.
-	[-sony]		Turns on Sony decoder. Off by default.
+    [input.bmp]     Input.bmp file. "test.bmp" by default.
+    [output.bmp]    Output .bmp file. "filtered.bmp" by default.
+    -c              Uses the following commandline parameters instead of opening a window:
+    [-scanoff]      Turns off scanline effects. On by default.
+    [-mergeoff]     Disables merging even and odd fields together to reduce flicker. Burst phase is 1 by default.
+    [-hue]          <value> ranges from -1.00 (-180 deg) to 1.00 (+180 deg). 0 by default.
+    [-saturation]   <value> ranges from -1.00 (grayscale) to 1.00 (oversaturated). 0 by default.
+    [-hue]  <value> ranges from -1.00 to 1.00.. 0 by default.
+    [-contrast]     <value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.
+    [-brightness]   <value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.
+    [-sharpness]    <value> ranges from -1.00 to 1.00. 0 by default.
+    [-gamma]        <value> ranges from -1.00 to 1.00. 0 by default.
+    [-resolution]   Image resolution.
+    [-artifacts]    Artifacts caused by color changes.
+    [-fringing]     Color artifacts caused by brightness changes.
+    [-bleed]        Color bleed (color resolution reduction).
+    [-vidmode]      Selects a video mode. "cvbs" by default.
+    [-sony]         Turns on Sony decoder. Off by default.
+    [-decodematrix] Specifies a custom decoding matrix. This overrides any decoder used.
 
 As an alternative to the command line, you can drag the input BMP onto the EXE file.
 
