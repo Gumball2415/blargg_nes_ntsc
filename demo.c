@@ -125,7 +125,6 @@ int main(int argc, char** argv)
 				matrix[5] = 1.677;
 			}
 			setup.decoder_matrix = matrix;
-			// I have no idea why I need to call nes_ntsc_init() twice
 			nes_ntsc_init(ntsc, &setup);
 			
 			lock_pixels();
@@ -138,8 +137,6 @@ int main(int argc, char** argv)
 
 			double_output_height();
 			display_output();
-
-			nes_ntsc_init(ntsc, &setup);
 
 			printf("\tscanline enabled:\t%i\n", scanlines);
 			printf("\tmerge fields enabled:\t%i\n", merge_fields);
