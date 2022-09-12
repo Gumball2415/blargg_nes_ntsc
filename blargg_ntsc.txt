@@ -23,7 +23,7 @@ nes_ntsc    input.bmp output.bmp -c [-scanoff] [-mergeoff <burstphase>] [-hue <v
     [-mergeoff]     Disables merging even and odd fields together to reduce flicker. Burst phase is 1 by default.
     [-hue]          <value> ranges from -1.00 (-180 deg) to 1.00 (+180 deg). 0 by default.
     [-saturation]   <value> ranges from -1.00 (grayscale) to 1.00 (oversaturated). 0 by default.
-    [-hue]  <value> ranges from -1.00 to 1.00.. 0 by default.
+    [-hue]          <value> ranges from -1.00 to 1.00.. 0 by default.
     [-contrast]     <value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.
     [-brightness]   <value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.
     [-sharpness]    <value> ranges from -1.00 to 1.00. 0 by default.

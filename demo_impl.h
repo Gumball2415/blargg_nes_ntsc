@@ -56,7 +56,7 @@ void cmd_usage(void)
 	fprintf(stdout, "\t[-mergeoff]\tDisables merging even and odd fields together to reduce flicker. Burst phase is 1 by default.\n");
 	fprintf(stdout, "\t[-hue]\t\t<value> ranges from -1.00 (-180 deg) to 1.00 (+180 deg). 0 by default.\n");
 	fprintf(stdout, "\t[-saturation]\t<value> ranges from -1.00 (grayscale) to 1.00 (oversaturated). 0 by default.\n");
-	fprintf(stdout, "\t[-hue]\t<value> ranges from -1.00 to 1.00.. 0 by default.\n");
+	fprintf(stdout, "\t[-hue]\t\t<value> ranges from -1.00 to 1.00.. 0 by default.\n");
 	fprintf(stdout, "\t[-contrast]\t<value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.\n");
 	fprintf(stdout, "\t[-brightness]\t<value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.\n");
 	fprintf(stdout, "\t[-sharpness]\t<value> ranges from -1.00 to 1.00. 0 by default.\n");
