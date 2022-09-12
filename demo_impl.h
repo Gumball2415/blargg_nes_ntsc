@@ -26,7 +26,7 @@ void fatal_error( const char* str );
 
 static unsigned char* output_pixels; /* 16-bit RGB */
 static long output_pitch;
-static float mouse_x, mouse_y; /* -1.0 to 1.0 */
+static double mouse_x, mouse_y; /* -1.0 to 1.0 */
 static int mouse_moved;
 static int key_pressed;
 static int scanlines = 1;
@@ -48,14 +48,23 @@ void fatal_error( const char* str )
 void cmd_usage(void)
 {
 	fprintf(stdout, "usage:\nnes_ntsc\t[input.bmp] [output.bmp]\n");
-	fprintf(stdout, "nes_ntsc\tinput.bmp output.bmp -c [-scanoff] [-mergeoff <burstphase>] [-sharpness <value>] [-gamma <value>] [-vidmode cvbs|svid|rgb|mono] [-sony] [-decodematrix <ir> <qr> <ig> <qg> <ib> <qb>]\n\n");
+	fprintf(stdout, "nes_ntsc\tinput.bmp output.bmp -c [-scanoff] [-mergeoff <burstphase>] [-hue <value>] [-saturation <value>] [-contrast <value>] [-brightness <value>] [-sharpness <value>] [-gamma <value>] [-resolution <value>] [-artifacts <value>] [-fringing <value>] [-bleed <value>] [-vidmode cvbs|svid|rgb|mono] [-sony] [-decodematrix <ir> <qr> <ig> <qg> <ib> <qb>]\n\n");
 	fprintf(stdout, "\t[input.bmp]\tInput.bmp file. \"test.bmp\" by default.\n");
 	fprintf(stdout, "\t[output.bmp]\tOutput .bmp file. \"filtered.bmp\" by default.\n");
 	fprintf(stdout, "\t-c\t\tUses the following commandline parameters instead of opening a window:\n");
 	fprintf(stdout, "\t[-scanoff]\tTurns off scanline effects. On by default.\n");
-	fprintf(stdout, "\t[-mergeoff]\tDisables merging fields. Burst phase is 1 by default.\n");
+	fprintf(stdout, "\t[-mergeoff]\tDisables merging even and odd fields together to reduce flicker. Burst phase is 1 by default.\n");
+	fprintf(stdout, "\t[-hue]\t\t<value> ranges from -1.00 (-180 deg) to 1.00 (+180 deg). 0 by default.\n");
+	fprintf(stdout, "\t[-saturation]\t<value> ranges from -1.00 (grayscale) to 1.00 (oversaturated). 0 by default.\n");
+	fprintf(stdout, "\t[-hue]\t<value> ranges from -1.00 to 1.00.. 0 by default.\n");
+	fprintf(stdout, "\t[-contrast]\t<value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.\n");
+	fprintf(stdout, "\t[-brightness]\t<value> ranges from -1.00 (dark) to 1.00 (light). 0 by default.\n");
 	fprintf(stdout, "\t[-sharpness]\t<value> ranges from -1.00 to 1.00. 0 by default.\n");
 	fprintf(stdout, "\t[-gamma]\t<value> ranges from -1.00 to 1.00. 0 by default.\n");
+	fprintf(stdout, "\t[-resolution]\tImage resolution.\n");
+	fprintf(stdout, "\t[-artifacts]\tArtifacts caused by color changes.\n");
+	fprintf(stdout, "\t[-fringing]\tColor artifacts caused by brightness changes.\n");
+	fprintf(stdout, "\t[-bleed]\tColor bleed (color resolution reduction).\n");
 	fprintf(stdout, "\t[-vidmode]\tSelects a video mode. \"cvbs\" by default.\n");
 	fprintf(stdout, "\t[-sony]\t\tTurns on Sony decoder. Off by default.\n");
 	fprintf(stdout, "\t[-decodematrix]\tSpecifies a custom decoding matrix. This overrides any decoder used.\n");
@@ -124,8 +133,8 @@ int read_input( void )
 			int x, y;
 			SDL_GetMouseState( &x, &y );
 			mouse_moved = 1;
-			mouse_x = x / (float) (SDL_GetWindowSurface(screen)->w - 1) * 2 - 1;
-			mouse_y = (1 - y / (float) (SDL_GetWindowSurface(screen)->h - 1)) * 2 - 1;
+			mouse_x = x / (double) (SDL_GetWindowSurface(screen)->w - 1) * 2 - 1;
+			mouse_y = (1 - y / (double) (SDL_GetWindowSurface(screen)->h - 1)) * 2 - 1;
 		}
 	}
 	return 1;

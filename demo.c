@@ -59,8 +59,16 @@ int main(int argc, char** argv)
 
 			// handle commandline flags
 			burst_phase = 1;
-			float sharpness = 0.0;
-			float gamma = 0.0;
+			double hue = 0.0;
+			double saturation = 0.0;
+			double contrast = 0.0;
+			double brightness = 0.0;
+			double sharpness = 0.0;
+			double gamma = 0.0;
+			double resolution = 0.0;
+			double artifacts = 0.0;
+			double fringing = 0.0;
+			double bleed = 0.0;
 			char videomode[] = "NTSC composite";
 			float matrix[6] = { 0.956f, 0.621f, -0.272f, -0.647f, -1.105f, 1.702f };
 			int i;
@@ -71,14 +79,38 @@ int main(int argc, char** argv)
 
 				if (strcmp(argv[i], "-mergeoff") == 0) {
 					merge_fields = 0;
-					burst_phase = atoll(argv[i + 1]);
+					burst_phase = atoi(argv[i + 1]);
 				}
 
+				if (strcmp(argv[i], "-hue") == 0)
+					hue = strtof(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-saturation") == 0)
+					saturation = strtod(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-contrast") == 0)
+					contrast = strtod(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-brightness") == 0)
+					brightness = strtod(argv[i + 1], NULL);
+
 				if (strcmp(argv[i], "-sharpness") == 0)
-					sharpness = strtof(argv[i + 1], NULL);
+					sharpness = strtod(argv[i + 1], NULL);
 
 				if (strcmp(argv[i], "-gamma") == 0)
-					gamma = strtof(argv[i + 1], NULL);
+					gamma = strtod(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-resolution") == 0)
+					resolution = strtod(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-artifacts") == 0)
+					artifacts = strtod(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-fringing") == 0)
+					fringing = strtod(argv[i + 1], NULL);
+
+				if (strcmp(argv[i], "-bleed") == 0)
+					bleed = strtod(argv[i + 1], NULL);
 
 				// how do I switch case with strings
 				if (strcmp(argv[i], "-vidmode") == 0) {
@@ -112,17 +144,25 @@ int main(int argc, char** argv)
 				}
 			}
 			setup.merge_fields = merge_fields;
+			setup.hue = hue;
+			setup.saturation = saturation;
+			setup.contrast = contrast;
+			setup.brightness = brightness;
 			setup.sharpness = sharpness;
 			setup.gamma = gamma;
+			setup.resolution = resolution;
+			setup.artifacts = artifacts;
+			setup.fringing = fringing;
+			setup.bleed = bleed;
 			if (sony_decoder)
 			{
 				/* Sony CXA2025AS US */
-				matrix[0] = 1.630;
-				matrix[1] = 0.317;
-				matrix[2] = -0.378;
-				matrix[3] = -0.466;
-				matrix[4] = -1.089;
-				matrix[5] = 1.677;
+				matrix[0] = (float)1.630;
+				matrix[1] = (float)0.317;
+				matrix[2] = (float)-0.378;
+				matrix[3] = (float)-0.466;
+				matrix[4] = (float)-1.089;
+				matrix[5] = (float)1.677;
 			}
 			setup.decoder_matrix = matrix;
 			nes_ntsc_init(ntsc, &setup);
@@ -140,8 +180,14 @@ int main(int argc, char** argv)
 
 			printf("\tscanline enabled:\t%i\n", scanlines);
 			printf("\tmerge fields enabled:\t%i\n", merge_fields);
+			printf("\thue:\t\t\t%f\n", hue);
+			printf("\tsaturation:\t\t%f\n", saturation);
 			printf("\tsharpness:\t\t%f\n", sharpness);
 			printf("\tgamma:\t\t\t%f\n", gamma);
+			printf("\tresolution:\t\t%f\n", resolution);
+			printf("\tartifacts\t\t%f\n", artifacts);
+			printf("\tfringing\t\t%f\n", fringing);
+			printf("\tbleed\t\t\t%f\n", bleed);
 			printf("\tvideo mode:\t\t%s\n", videomode);
 			printf("\tsony decoder enabled:\t%i\n", sony_decoder);
 			printf("\tdecoding matrix:\t%f, %f, %f, %f, %f, %f\n", matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
@@ -186,7 +232,14 @@ int main(int argc, char** argv)
 					if (sony_decoder)
 					{
 						/* Sony CXA2025AS US */
-						static float matrix[6] = { 1.630, 0.317, -0.378, -0.466, -1.089, 1.677 };
+						static float matrix[6] = {
+							(float)1.630,
+							(float)0.317,
+							(float)-0.378,
+							(float)-0.466,
+							(float)-1.089,
+							(float)1.677
+						};
 						setup.decoder_matrix = matrix;
 					}
 
