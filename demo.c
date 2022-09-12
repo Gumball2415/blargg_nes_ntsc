@@ -42,7 +42,6 @@ int main(int argc, char** argv)
 		cmd_usage();
 	else {
 		image_t image;
-		float matrix[6] = { 0.956f, 0.621f, -0.272f, -0.647f, -1.105f, 1.702f };
 		int sony_decoder = 0;
 		int merge_fields = 1;
 		int burst_phase = 0;
@@ -63,6 +62,7 @@ int main(int argc, char** argv)
 			float sharpness = 0.0;
 			float gamma = 0.0;
 			char videomode[] = "NTSC composite";
+			float matrix[6] = { 0.956f, 0.621f, -0.272f, -0.647f, -1.105f, 1.702f };
 			int i;
 			for (i = 0; i < argc; i++)
 			{
