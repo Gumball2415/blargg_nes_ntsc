@@ -48,7 +48,7 @@ void fatal_error( const char* str )
 void cmd_usage(void)
 {
 	fprintf(stdout, "usage:\nnes_ntsc\t[input.bmp] [output.bmp]\n");
-	fprintf(stdout, "nes_ntsc\tinput.bmp output.bmp -c [-scanoff] [-mergeoff <burstphase>] [-sharpness <value>] [-gamma <value>] [-vidmode cvbs|svid|rgb|mono] [-sony]\n\n");
+	fprintf(stdout, "nes_ntsc\tinput.bmp output.bmp -c [-scanoff] [-mergeoff <burstphase>] [-sharpness <value>] [-gamma <value>] [-vidmode cvbs|svid|rgb|mono] [-sony] [-decodematrix <ir> <qr> <ig> <qg> <ib> <qb>]\n\n");
 	fprintf(stdout, "\t[input.bmp]\tInput.bmp file. \"test.bmp\" by default.\n");
 	fprintf(stdout, "\t[output.bmp]\tOutput .bmp file. \"filtered.bmp\" by default.\n");
 	fprintf(stdout, "\t-c\t\tUses the following commandline parameters instead of opening a window:\n");
@@ -58,6 +58,7 @@ void cmd_usage(void)
 	fprintf(stdout, "\t[-gamma]\t<value> ranges from -1.00 to 1.00. 0 by default.\n");
 	fprintf(stdout, "\t[-vidmode]\tSelects a video mode. \"cvbs\" by default.\n");
 	fprintf(stdout, "\t[-sony]\t\tTurns on Sony decoder. Off by default.\n");
+	fprintf(stdout, "\t[-decodematrix]\tSpecifies a custom decoding matrix. This overrides any decoder used.\n");
 }
 
 static void init_sdl_( void )

@@ -40,18 +40,17 @@ int main(int argc, char** argv)
 {
 	if (argc > 1 && strcmp(argv[1], "-h") == 0)
 		cmd_usage();
-	else
-	{
-	image_t image;
-	int sony_decoder = 0;
-	int merge_fields = 1;
-	int burst_phase = 0;
-	nes_ntsc_setup_t setup = nes_ntsc_composite;
+	else {
+		image_t image;
+		float matrix[6] = { 0.956f, 0.621f, -0.272f, -0.647f, -1.105f, 1.702f };
+		int sony_decoder = 0;
+		int merge_fields = 1;
+		int burst_phase = 0;
+		nes_ntsc_setup_t setup = nes_ntsc_composite;
 
-	nes_ntsc_t* ntsc = (nes_ntsc_t*)malloc(sizeof(nes_ntsc_t));
-	if (!ntsc)
-		fatal_error("Out of memory");
-	nes_ntsc_init(ntsc, &setup);
+		nes_ntsc_t* ntsc = (nes_ntsc_t*)malloc(sizeof(nes_ntsc_t));
+		if (!ntsc)
+			fatal_error("Out of memory");
 
 		load_bmp(&image, (argc > 1 ? argv[1] : "test.bmp"), palette);
 		init_window(NES_NTSC_OUT_WIDTH(image.width), image.height * 2);
@@ -102,18 +101,30 @@ int main(int argc, char** argv)
 
 				if (strcmp(argv[i], "-sony") == 0)
 					sony_decoder = 1;
+				else if (strcmp(argv[i], "-decodematrix") == 0) {
+					sony_decoder = 0;
+					matrix[0] = atoll(argv[i + 1]);
+					matrix[1] = atoll(argv[i + 2]);
+					matrix[2] = atoll(argv[i + 3]);
+					matrix[3] = atoll(argv[i + 4]);
+					matrix[4] = atoll(argv[i + 5]);
+					matrix[5] = atoll(argv[i + 6]);
+				}
 			}
 			setup.merge_fields = merge_fields;
 			setup.sharpness = sharpness;
 			setup.gamma = gamma;
-
-			setup.decoder_matrix = 0;
 			if (sony_decoder)
 			{
 				/* Sony CXA2025AS US */
-				static float matrix[6] = { 1.630, 0.317, -0.378, -0.466, -1.089, 1.677 };
-				setup.decoder_matrix = matrix;
+				matrix[0] = 1.630;
+				matrix[1] = 0.317;
+				matrix[2] = -0.378;
+				matrix[3] = -0.466;
+				matrix[4] = -1.089;
+				matrix[5] = 1.677;
 			}
+			setup.decoder_matrix = matrix;
 			// I have no idea why I need to call nes_ntsc_init() twice
 			nes_ntsc_init(ntsc, &setup);
 			
@@ -136,6 +147,7 @@ int main(int argc, char** argv)
 			printf("\tgamma:\t\t\t%f\n", gamma);
 			printf("\tvideo mode:\t\t%s\n", videomode);
 			printf("\tsony decoder enabled:\t%i\n", sony_decoder);
+			printf("\tdecoding matrix:\t%f, %f, %f, %f, %f, %f\n", matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 		}
 		else
 		{
